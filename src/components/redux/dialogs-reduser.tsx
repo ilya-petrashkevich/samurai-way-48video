@@ -1,4 +1,4 @@
-// import React from 'react';
+import React from 'react';
 import {ActionsTypes, DialogsPageType} from "./store";
 
 let initialState: DialogsPageType = {

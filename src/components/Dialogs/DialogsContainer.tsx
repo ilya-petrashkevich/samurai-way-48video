@@ -3,6 +3,7 @@ import {sendMessageAC, updateNewMessageBodyAC} from "../redux/dialogs-reduser"
 import Dialogs from "./Dialogs";
 import {connect} from "react-redux";
 import {AppStateType} from "../redux/redux-store";
+import {Dispatch} from "redux";
 
 
 let mapStateToProps = (state: AppStateType) => {
@@ -12,7 +13,7 @@ let mapStateToProps = (state: AppStateType) => {
         newMessageBody: state.dialogsPage.newMessageBody
     }
 }
-let mapDispatchToProps = (dispatch: any) => {
+let mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         updateNewMessageBody: (body: string) => {
             dispatch(updateNewMessageBodyAC(body))

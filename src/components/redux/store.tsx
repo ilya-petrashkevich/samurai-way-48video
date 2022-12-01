@@ -1,15 +1,9 @@
 import {profileReducer, addPostAC, updateNewPostTextAC} from "./profile-reducer";
 import {dialogsReducer, sendMessageAC, updateNewMessageBodyAC} from "./dialogs-reduser";
 import navbarReducer from "./navbar-reducer";
+import {followAC, setUsersAC, unfollowAC, usersReducer, UserType} from "./users-reducer";
 
 
-// let onChange = () => {
-//     console.log('State was changed')
-// }
-
-// export const subscribe = (/*callback*/observer: () => void) => {
-//     onChange = observer;
-// }
 
 export type DialogsType = {
     id: number
@@ -43,14 +37,15 @@ export type ProfilePageType = {
     newPostText: newPostTextType
 }
 
+export type UsersPageType = {
+    users: UserType[]
+}
+
 export type StateType = {
-    dialogsPage: DialogsPageType/*{
-        dialogs: DialogsType[]
-        messages: MessagesType[]
-        newMessageBody: string }*/
-    profilePage: ProfilePageType/*{
-        posts: PostsType[]
-        newPostText: newPostTextType }*/
+    dialogsPage: DialogsPageType
+    profilePage: ProfilePageType
+
+    usersPage: UsersPageType
     sidebar: {}
 }
 
@@ -75,6 +70,33 @@ let messages: MessagesType[] = [
 let posts: PostsType[] = [
     {id: 1, message: "Hi, how are you?", likesCount: 12},
     {id: 2, message: "It`s my first post", likesCount: 5},
+];
+
+let users: UserType[] = [
+    {
+        id: 1,
+        photoURL: 'https://comp-pro.ru/wp-content/uploads/b/7/0/b702c0cdba04fbaca0a1226ecf052fac.jpeg',
+        followed: false,
+        fullName: 'Dmitry',
+        status: 'boss',
+        location: {city: 'Minsk', country: 'Belarus'}
+    },
+    {
+        id: 2,
+        photoURL: 'https://comp-pro.ru/wp-content/uploads/b/7/0/b702c0cdba04fbaca0a1226ecf052fac.jpeg',
+        followed: true,
+        fullName: 'Sasha',
+        status: 'boss',
+        location: {city: 'Moscow', country: 'Russia'}
+    },
+    {
+        id: 3,
+        photoURL: 'https://comp-pro.ru/wp-content/uploads/b/7/0/b702c0cdba04fbaca0a1226ecf052fac.jpeg',
+        followed: false,
+        fullName: 'Andrew',
+        status: 'boss',
+        location: {city: 'Kiev', country: 'Ukraine'}
+    }
 ];
 
 
@@ -107,8 +129,6 @@ let posts: PostsType[] = [
 
 export type StoreType = {
     _state: StateType
-    // updateNewPostText: (newText: string) => void
-    // addPost: (postMessage/*?*/: string) => void
     _onChange: () => void
     subscribe: (callback: () => void) => void
     getState: () => StateType
@@ -119,7 +139,10 @@ export type ActionsTypes =
     ReturnType<typeof addPostAC>
     | ReturnType<typeof updateNewPostTextAC>
     | ReturnType<typeof updateNewMessageBodyAC>
-    | ReturnType<typeof sendMessageAC>;
+    | ReturnType<typeof sendMessageAC>
+    | ReturnType<typeof followAC>
+    | ReturnType<typeof unfollowAC>
+    | ReturnType<typeof setUsersAC>;
 
 
 export const store: StoreType = {
@@ -132,6 +155,9 @@ export const store: StoreType = {
         profilePage: {
             posts,
             newPostText //эта строчка под снос
+        },
+        usersPage: {
+          users
         },
         sidebar: {}
     },
@@ -148,6 +174,7 @@ export const store: StoreType = {
 
         this._state.profilePage = profileReducer(this._state.profilePage, action);
         this._state.dialogsPage = dialogsReducer(this._state.dialogsPage, action)
+        this._state.usersPage = usersReducer(this._state.usersPage, action)
         this._state.sidebar = navbarReducer(this._state.sidebar, action)
 
         this._onChange();

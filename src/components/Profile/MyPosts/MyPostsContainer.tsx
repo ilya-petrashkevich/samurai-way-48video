@@ -4,6 +4,7 @@ import MyPosts from "./MyPosts";
 import {connect} from "react-redux";
 import store from "../../redux/redux-store";
 import {AppStateType} from "../../redux/redux-store";
+import {Dispatch} from "redux";
 
 
 let mapStateToProps = (state: AppStateType) => {
@@ -12,7 +13,7 @@ let mapStateToProps = (state: AppStateType) => {
         newPostText: state.profilePage.newPostText
     }
 }
-let mapDispatchToProps = (dispatch: any) => {
+let mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         updateNewPostText: (text: string) => {
             dispatch(updateNewPostTextAC(text))
@@ -24,5 +25,4 @@ let mapDispatchToProps = (dispatch: any) => {
 }
 
 const MyPostsContainer = connect(mapStateToProps, mapDispatchToProps)(MyPosts);
-
 export default MyPostsContainer;
